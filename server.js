@@ -10,28 +10,34 @@ const app = express();
 
 
 app.use((req, res, next) => {
+    console.log('Headers:', req.headers);
     console.log(`Request Method: ${req.method}, Request URL: ${req.url}`);
     next();
 });
 
-
 app.options('*', cors())
 
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, username'); // Укажите здесь заголовки
+    next();
+});
 
 app.use(express.json());
 app.use(bodyParser.json());
 
-app.options('/api/*', cors());  // Обрабатываем предварительные запросы CORS для всех маршрутов, начинающихся с /api
 
 
 const corsOptions = {
-    "origin": "*",
-    "methods": "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
-    "preflightContinue": false,
-    "optionsSuccessStatus": 204
+    origin: 'https://web.telegram.org', // Разрешаем запросы только от Telegram WebApp
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'username'], // Кастомные заголовки, такие как 'username'
+    credentials: true, // Если требуется аутентификация
+    optionsSuccessStatus: 204
 };
 
-app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));  // Разрешаем preflight-запросы для всех маршрутов
 
 // Импортируем маршруты
 const exchangeRoutes = require('./routes/put-exchangeRoutes');
