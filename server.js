@@ -15,27 +15,31 @@ app.use((req, res, next) => {
     next();
 });
 
-app.options('*', cors())
-
-app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, username'); // Укажите здесь заголовки
-    next();
-});
-
 app.use(express.json());
 app.use(bodyParser.json());
 
 
 
+const allowedOrigins = [
+    'https://32e8-188-163-45-97.ngrok-free.app',
+    'https://web.telegram.org' // если нужно разрешить и Telegram WebApp
+];
+
 const corsOptions = {
-    origin: 'https://web.telegram.org', // Разрешаем запросы только от Telegram WebApp
+    origin: function (origin, callback) {
+        if (allowedOrigins.includes(origin) || !origin) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'username'], // Кастомные заголовки, такие как 'username'
-    credentials: true, // Если требуется аутентификация
-    optionsSuccessStatus: 204
+    allowedHeaders: ['Content-Type', 'Authorization', 'username'],
+    credentials: true
 };
+
+app.use(cors(corsOptions));
+
 
 app.options('*', cors(corsOptions));  // Разрешаем preflight-запросы для всех маршрутов
 
