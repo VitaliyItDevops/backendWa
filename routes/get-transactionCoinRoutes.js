@@ -3,7 +3,7 @@ const router = express.Router();
 const transactionCoinModel = require('../models/transaction.js');
 
 // Поиск всех транзакций для конкретного пользователя
-router.get('/transactions', async (req, res) => {
+router.get('/:userId', async (req, res) => {
     try {
         const { userId } = req.query; // Получаем userId из query-параметров
 
