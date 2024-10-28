@@ -3,16 +3,16 @@ const router = express.Router();
 const transactionCoinModel = require('../models/transaction.js');
 
 // Поиск всех транзакций для конкретного пользователя
-router.get('/:userId', async (req, res) => {
+router.get('/:username', async (req, res) => {
     try {
-        const { userId } = req.query; // Получаем userId из query-параметров
+        const { username } = req.query; // Получаем userId из query-параметров
 
-        if (!userId) {
+        if (!username) {
             return res.status(400).send('userId не указан');
         }
 
         // Находим транзакции по userId
-        const transactions = await transactionCoinModel.find({ userId });
+        const transactions = await transactionCoinModel.find({ username });
         console.log('Транзакции:', transactions);
 
         if (!transactions.length) {
@@ -22,7 +22,7 @@ router.get('/:userId', async (req, res) => {
         // Форматируем транзакции для ответа
         const transactionsWithDetails = transactions.map((item) => ({
             _id: item._id,
-            userId: item.userId,
+            username: item.username,
             type: item.type,
             coin: item.coin,
             status: item.status,

@@ -3,16 +3,16 @@ const router = express.Router();
 const transactionEarnModel = require('../models/transactionEarn.js');
 
 // Поиск транзакций Earn для конкретного пользователя
-router.get('/:userId', async (req, res) => {
+router.get('/:username', async (req, res) => {
     try {
-        const { userId } = req.params; // Получаем userId из параметров маршрута
+        const { username } = req.params; // Получаем userId из параметров маршрута
 
-        if (!userId) {
+        if (!username) {
             return res.status(400).send('userId не указан');
         }
 
         // Находим транзакции Earn по userId
-        const transactions = await transactionEarnModel.find({ userId });
+        const transactions = await transactionEarnModel.find({ username });
         console.log('Транзакции Earn:', transactions);
 
         if (!transactions.length) {
@@ -22,7 +22,7 @@ router.get('/:userId', async (req, res) => {
         // Форматируем транзакции для ответа
         const transactionsWithDetails = transactions.map((item) => ({
             _id: item._id,
-            userId: item.userId,
+            username: item.username,
             type: item.type,
             coin: item.coin,
             status: item.status,

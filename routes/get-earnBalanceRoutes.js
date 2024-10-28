@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 
 
 router.get('/earns_coins/:username', async (req, res) => {
-    const username = req.params.username;
+    const username = req.params;
 
     if (!username) {
         return res.status(400).json({ error: 'Необходимо указать userId' });
