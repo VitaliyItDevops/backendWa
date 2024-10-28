@@ -12,7 +12,7 @@ router.get('/:username', async (req, res) => {
         }
 
         // Находим транзакции по userId
-        const transactions = await transactionCoinModel.find({ username });
+        const transactions = await transactionCoinModel.find({ userId: username });
         console.log('Транзакции:', transactions);
 
         if (!transactions.length) {

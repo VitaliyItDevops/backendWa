@@ -12,7 +12,7 @@ router.get('/:username', async (req, res) => {
         }
 
         // Находим транзакции Earn по userId
-        const transactions = await transactionEarnModel.find({ username });
+        const transactions = await transactionEarnModel.find({ userId: username });
         console.log('Транзакции Earn:', transactions);
 
         if (!transactions.length) {
