@@ -3,7 +3,7 @@ const router = express.Router();
 const transactionEarnModel = require('../models/transactionEarn.js');
 
 // Поиск транзакций Earn для конкретного пользователя
-router.get('/transactionsEarn', async (req, res) => {
+router.get('/:username', async (req, res) => {
     try {
         const { username } = req.query; // Получаем userId из query-параметров
 

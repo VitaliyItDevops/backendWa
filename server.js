@@ -64,7 +64,7 @@ app.use('/api', newsRoutes);
 app.use('/api/balanceAll', balanceRoutes);
 app.use('/api', transactionCoinRoutes);
 app.use('/api', earnBalanceRoutes);
-app.use('/api', transactionEarnRoutes);
+app.use('/api/transactionsEarn', transactionEarnRoutes);
 mongoose.connect(process.env.DBURL, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('Connected to database'))
     .catch((err) => console.error('Database connection error:', err));
