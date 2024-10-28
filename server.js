@@ -1,16 +1,13 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
+const bodyParser = require('body-parser');
 const cors = require('cors');
 require('dotenv').config();
 
 
 const app = express();
 
-app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).send('Что-то пошло не так!');
-});
 
 app.use((req, res, next) => {
     console.log('Headers:', req.headers);
