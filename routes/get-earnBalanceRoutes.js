@@ -5,7 +5,7 @@ const fs = require('fs');
 const mongoose = require('mongoose');
 
 
-router.get('/earns_coins/:username', async (req, res) => {
+router.get('/:username', async (req, res) => {
     const username = req.params;
 
     if (!username) {

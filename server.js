@@ -63,7 +63,7 @@ app.use('/api', unstakeRoutes);
 app.use('/api', newsRoutes);
 app.use('/api/balanceAll', balanceRoutes);
 app.use('/api/transactions', transactionCoinRoutes);
-app.use('/api', earnBalanceRoutes);
+app.use('/api/earns_coins', earnBalanceRoutes);
 app.use('/api/transactionsEarn', transactionEarnRoutes);
 mongoose.connect(process.env.DBURL, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('Connected to database'))
