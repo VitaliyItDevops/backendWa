@@ -5,7 +5,7 @@ const transactionEarnModel = require('../models/transactionEarn.js');
 // Поиск транзакций Earn для конкретного пользователя
 router.get('/:username', async (req, res) => {
     try {
-        const { username } = req.params.username.replace('@', '').toString(); // Получаем userId из параметров маршрута
+        const username = req.params.username.replace('@', '').toString(); // Правильное извлечение
 
         if (!username) {
             return res.status(400).send('userId не указан');
