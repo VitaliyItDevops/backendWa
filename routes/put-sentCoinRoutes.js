@@ -4,6 +4,8 @@ const transactionCoinModel = require("../models/transaction");
 const router = express.Router();
 
 router.put('/sent_coins', async (req, res) => {
+    console.log('Received request to /sent_coins:', req.body);
+
     try {
         const { username, sentData } = req.body;
         const { amountRecieved, collectionName, coinName, amountUsdt } = sentData;
