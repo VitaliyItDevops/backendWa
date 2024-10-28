@@ -5,7 +5,7 @@ const router = express.Router();
 // Маршрут для обмена монетами
 router.put('/exchange-coins', async (req, res) => {
     try {
-        const { coin1, coin2, userId } = req.body;
+        const { coin1, coin2, username } = req.body;
         const { name: coin1Name, amount: coin1Amount, rate: coin1Rate, collectionName: coin1Collection } = coin1;
         const { name: coin2Name, rate: coin2Rate, collectionName: coin2Collection } = coin2;
 
@@ -38,8 +38,8 @@ router.put('/exchange-coins', async (req, res) => {
         }, { collection: coin2Collection }));
 
         // Поиск балансов пользователя
-        const balanceCoin1 = await BalanceModelCoin1.findOne({ user: userId });
-        const balanceCoin2 = await BalanceModelCoin2.findOne({ user: userId });
+        const balanceCoin1 = await BalanceModelCoin1.findOne({ user: username });
+        const balanceCoin2 = await BalanceModelCoin2.findOne({ user: username });
 
         if (!balanceCoin1) {
             return res.status(404).json({ message: `Document not found for ${coin1Name} in ${coin1Collection}` });
@@ -62,13 +62,13 @@ router.put('/exchange-coins', async (req, res) => {
 
         // Обновляем балансы
         const updatedCoin1Balance = await BalanceModelCoin1.findOneAndUpdate(
-            { user: userId },
+            { user: username },
             { $inc: { balance: -coin1Amount } }, // Уменьшаем баланс первой монеты
             { new: true }
         );
 
         const updatedCoin2Balance = await BalanceModelCoin2.findOneAndUpdate(
-            { user: userId },
+            { user: username },
             { $inc: { balance: coin2AmountToAdd } }, // Увеличиваем баланс второй монеты
             { new: true }
         );

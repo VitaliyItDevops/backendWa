@@ -5,14 +5,14 @@ const transactionEarnModel = require('../models/transactionEarn.js');
 // Поиск транзакций Earn для конкретного пользователя
 router.get('/transactionsEarn', async (req, res) => {
     try {
-        const { userId } = req.query; // Получаем userId из query-параметров
+        const { username } = req.query; // Получаем userId из query-параметров
 
-        if (!userId) {
+        if (!username) {
             return res.status(400).send('userId не указан');
         }
 
         // Находим транзакции Earn по userId
-        const transactions = await transactionEarnModel.find({ userId });
+        const transactions = await transactionEarnModel.find({ username });
         console.log('Транзакции Earn:', transactions);
 
         if (!transactions.length) {

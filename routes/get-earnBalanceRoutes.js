@@ -6,9 +6,9 @@ const mongoose = require('mongoose');
 
 
 router.get('/earns_coins/:username', async (req, res) => {
-    const userId = req.params.username;
+    const username = req.params.username;
 
-    if (!userId) {
+    if (!username) {
         return res.status(400).json({ error: 'Необходимо указать userId' });
     }
 
@@ -37,7 +37,7 @@ router.get('/earns_coins/:username', async (req, res) => {
                 earnTotalYield: Number,
             }, { collection: collectionName }));
 
-            const earnData = await EarnModel.findOne({ user: userId });
+            const earnData = await EarnModel.findOne({ user: username });
 
             if (!earnData) {
                 console.log(`Нет данных по коллекции: ${collectionName}`);
