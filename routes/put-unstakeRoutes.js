@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.put('/unstake', async (req, res) => {
     try {
-        const { collectionName, amount, username, collectionName2, coinName } = req.body;
+        const { collectionName, amount, userId, collectionName2, coinName } = req.body;
 
         console.log('Unstake request received:', req.body);
 
@@ -16,7 +16,7 @@ router.put('/unstake', async (req, res) => {
         if (amount <= 0) {
             const TransactionModel = mongoose.model('transactionEarn');
             await TransactionModel.create({
-                userId: username,
+                userId: userId,
                 type: 'Unstake',
                 coin: coinName,
                 status: 'rejected',
@@ -37,12 +37,12 @@ router.put('/unstake', async (req, res) => {
             balance: Number,
         }, { collection: collectionName2 }));
 
-        const earnData = await EarnModel.findOne({ user: username });
+        const earnData = await EarnModel.findOne({ user: userId });
 
         if (!earnData) {
             const TransactionModel = mongoose.model('transactionEarn');
             await TransactionModel.create({
-                userId: username,
+                userId: userId,
                 type: 'Unstake',
                 coin: coinName,
                 status: 'rejected',
@@ -56,7 +56,7 @@ router.put('/unstake', async (req, res) => {
         if (earnData.earnBalance < amount) {
             const TransactionModel = mongoose.model('transactionEarn');
             await TransactionModel.create({
-                userId: username,
+                userId: userId,
                 type: 'Unstake',
                 coin: coinName,
                 status: 'rejected',
@@ -67,26 +67,26 @@ router.put('/unstake', async (req, res) => {
         }
 
         const updatedEarnBalance = await EarnModel.findOneAndUpdate(
-            { user: username },
+            { user: userId },
             { $inc: { earnBalance: -amount }, $set: { earnTotalYield: 0 } },
             { new: true }
         );
 
         const amountToAdd = amount + earnData.earnTotalYield;
         const updatedMainBalance = await MainBalanceModel.findOneAndUpdate(
-            { user: username },
+            { user: userId },
             { $inc: { balance: amountToAdd } },
             { new: true }
         );
 
         if (!updatedMainBalance) {
-            await MainBalanceModel.create({ user: username, balance: amountToAdd });
+            await MainBalanceModel.create({ user: userId, balance: amountToAdd });
         }
 
         // Сохранение транзакции анстейкинга
         const TransactionModel = mongoose.model('transactionEarn');
         await TransactionModel.create({
-            userId: username,
+            userId: userId,
             type: 'Unstake',
             coin: coinName,
             status: 'confirmed',

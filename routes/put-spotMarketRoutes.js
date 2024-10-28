@@ -11,7 +11,7 @@ router.put('/submit-order', async (req, res) => {
         console.log('Order received:', orderData);
 
         // Деструктурируем данные ордера
-        const { orderType, quantity, totalPrice, username, collectionName } = orderData;
+        const { orderType, quantity, totalPrice, userId, collectionName } = orderData;
         const collectionName2 = 'usdtBalance';
 
         // Создаем модель на основе названия коллекции для монет
@@ -27,8 +27,8 @@ router.put('/submit-order', async (req, res) => {
         }, { collection: collectionName2 }));
 
         // Получаем текущие балансы
-        const usdtBalanceDoc = await UsdtBalance.findOne({ user: username });
-        const coinBalanceDoc = await CoinModel.findOne({ user: username });
+        const usdtBalanceDoc = await UsdtBalance.findOne({ user: userId });
+        const coinBalanceDoc = await CoinModel.findOne({ user: userId });
 
         if (!usdtBalanceDoc) {
             return res.status(400).json({ message: 'У пользователя нет баланса USDT' });
@@ -47,11 +47,11 @@ router.put('/submit-order', async (req, res) => {
             // Обновляем балансы
             await Promise.all([
                 UsdtBalance.updateOne(
-                    { user: username },
+                    { user: userId },
                     { $inc: { balance: -totalPrice } }
                 ),
                 CoinModel.updateOne(
-                    { user: username },
+                    { user: userId },
                     { $inc: { balance: quantity } }
                 )
             ]);
@@ -67,11 +67,11 @@ router.put('/submit-order', async (req, res) => {
             // Обновляем балансы
             await Promise.all([
                 UsdtBalance.updateOne(
-                    { user: username },
+                    { user: userId },
                     { $inc: { balance: totalPrice } }
                 ),
                 CoinModel.updateOne(
-                    { user: username },
+                    { user: userId },
                     { $inc: { balance: -quantity } }
                 )
             ]);

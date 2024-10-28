@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.put('/stake', async (req, res) => {
     try {
-        const { collectionName, amount, username, collectionName2, coinName } = req.body;
+        const { collectionName, amount, userId, collectionName2, coinName } = req.body;
 
         console.log('Stake request received:', req.body);
 
@@ -16,7 +16,7 @@ router.put('/stake', async (req, res) => {
         if (amount <= 0) {
             const TransactionModel = mongoose.model('transactionEarn');
             await TransactionModel.create({
-                userId: username,
+                userId: userId,
                 type: 'Stake',
                 coin: coinName,
                 status: 'rejected',
@@ -37,12 +37,12 @@ router.put('/stake', async (req, res) => {
             balance: Number,
         }, { collection: collectionName2 }));
 
-        const mainBalanceData = await MainBalanceModel.findOne({ user: username });
+        const mainBalanceData = await MainBalanceModel.findOne({ user: userId });
 
         if (!mainBalanceData) {
             const TransactionModel = mongoose.model('transactionEarn');
             await TransactionModel.create({
-                userId: username,
+                userId: userId,
                 type: 'Stake',
                 coin: coinName,
                 status: 'rejected',
@@ -56,7 +56,7 @@ router.put('/stake', async (req, res) => {
         if (mainBalanceData.balance < amount) {
             const TransactionModel = mongoose.model('transactionEarn');
             await TransactionModel.create({
-                userId: username,
+                userId: userId,
                 type: 'Stake',
                 coin: coinName,
                 status: 'rejected',
@@ -67,22 +67,22 @@ router.put('/stake', async (req, res) => {
         }
 
         const updatedMainBalance = await MainBalanceModel.findOneAndUpdate(
-            { user: username },
+            { user: userId },
             { $inc: { balance: -amount } },
             { new: true }
         );
 
-        let earnData = await EarnModel.findOne({ user: username });
+        let earnData = await EarnModel.findOne({ user: userId });
 
         if (!earnData) {
             earnData = await EarnModel.create({
-                user: username,
+                user: userId,
                 earnBalance: amount,
                 earnTotalYield: 0,
             });
         } else {
             earnData = await EarnModel.findOneAndUpdate(
-                { user: username },
+                { user: userId },
                 { $inc: { earnBalance: amount } },
                 { new: true }
             );
@@ -91,7 +91,7 @@ router.put('/stake', async (req, res) => {
         // Сохранение транзакции стейкинга
         const TransactionModel = mongoose.model('transactionEarn');
         await TransactionModel.create({
-            userId: username,
+            userId: userId,
             type: 'Stake',
             coin: coinName,
             status: 'confirmed',

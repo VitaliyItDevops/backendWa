@@ -7,7 +7,7 @@ router.put('/sent_coins', async (req, res) => {
     console.log('Received request to /sent_coins:', req.body);
 
     try {
-        const { username, sentData } = req.body;
+        const { userId, sentData } = req.body;
         const { amountRecieved, collectionName, coinName, amountUsdt } = sentData;
 
         console.log('Request to send coins received:', req.body);
@@ -21,7 +21,7 @@ router.put('/sent_coins', async (req, res) => {
         // Проверка на отрицательные или нулевые значения
         if (amountRecieved <= 0) {
             const newTransaction = new transactionCoinModel({
-                username,
+                userId,
                 type: 'Sent',
                 coin: coinName, // Название монеты берем из имени коллекции
                 status: 'rejected',
@@ -43,7 +43,7 @@ router.put('/sent_coins', async (req, res) => {
         }, { collection: collectionName }));
 
         // Поиск баланса пользователя по ID
-        const userBalance = await BalanceModel.findOne({ user: username });
+        const userBalance = await BalanceModel.findOne({ user: userId });
 
         if (!userBalance) {
 
@@ -64,7 +64,7 @@ router.put('/sent_coins', async (req, res) => {
 
         // Обновляем баланс: уменьшаем баланс пользователя
         const updatedBalance = await BalanceModel.findOneAndUpdate(
-            { user: username },
+            { user: userId },
             { $inc: { balance: -amountRecieved } }, // Уменьшаем баланс на отправленное количество
             { new: true }
         );
@@ -73,7 +73,7 @@ router.put('/sent_coins', async (req, res) => {
 
         // Сохраняем транзакцию
         const newTransaction = new transactionCoinModel({
-            username,
+            userId,
             type: 'Sent',
             coin: coinName, // Название монеты берем из имени коллекции
             status: 'confirmed',
