@@ -62,7 +62,7 @@ app.use('/api', stakeRoutes);
 app.use('/api', unstakeRoutes);
 app.use('/api', newsRoutes);
 app.use('/api/balanceAll', balanceRoutes);
-app.use('/api', transactionCoinRoutes);
+app.use('/api/transactions', transactionCoinRoutes);
 app.use('/api', earnBalanceRoutes);
 app.use('/api/transactionsEarn', transactionEarnRoutes);
 mongoose.connect(process.env.DBURL, { useNewUrlParser: true, useUnifiedTopology: true })
