@@ -9,15 +9,20 @@ const agent = new https.Agent({
 
 router.post('/create-payment', async (req, res) => {
     try {
-        console.log(req.body); // Добавьте это для проверки входящих данных
+        console.log(req.body); // Логирование входящих данных
 
         const { amount, currency, orderNumber } = req.body;
 
+        // Проверка на наличие необходимых полей
+        if (!amount || !currency || !orderNumber) {
+            return res.status(400).json({ message: 'Необходимо указать сумму, валюту и номер заказа.' });
+        }
+
         // Установка параметров запроса для Сбербанка
         const sbRequest = {
-            amount: 100, // Сумма в рублях (без копеек)
-            currency: "RUB",
-            orderNumber: "123456" // Уникальный номер заказа
+            amount: parseInt(amount * 100), // Сумма в копейках
+            currency: currency, // Использование валюты из запроса
+            orderNumber: orderNumber // Уникальный номер заказа
         };
 
         const config = {
@@ -41,9 +46,10 @@ router.post('/create-payment', async (req, res) => {
             paymentUrl: response.data.formUrl,
         });
     } catch (error) {
-        console.error('Ошибка при создании платежа:', error);
-        res.status(500).json({ message: 'Ошибка сервера' });
+        console.error('Ошибка при создании платежа:', error.response ? error.response.data : error.message);
+        res.status(500).json({ message: 'Ошибка сервера', error: error.message });
     }
 });
+
 
 module.exports = router;
