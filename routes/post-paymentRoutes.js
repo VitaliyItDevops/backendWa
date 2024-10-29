@@ -1,7 +1,11 @@
 const express = require('express');
 const axios = require('axios');
+const https = require('https');
 
 const router = express.Router();
+const agent = new https.Agent({
+    rejectUnauthorized: false, // Отключение проверки сертификата
+});
 
 router.post('/create-payment', async (req, res) => {
     try {
@@ -16,7 +20,8 @@ router.post('/create-payment', async (req, res) => {
         };
 
         const config = {
-            headers: { Authorization: `Bearer 401643678:TEST:19304f66-8d05-4e61-a90d-cbf1035c4b0c` }
+            headers: { Authorization: `Bearer 401643678:TEST:19304f66-8d05-4e61-a90d-cbf1035c4b0c` },
+            httpsAgent: agent // Добавляем агент для отключения проверки сертификата
         };
 
         // Отправляем запрос на API Сбербанка
