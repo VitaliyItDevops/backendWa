@@ -22,7 +22,8 @@ router.post('/create-payment', async (req, res) => {
         const sbRequest = {
             amount: parseInt(amount * 100), // Сумма в копейках
             currency: currency, // Использование валюты из запроса
-            orderNumber: orderNumber // Уникальный номер заказа
+            orderNumber: orderNumber, // Уникальный номер заказа
+            token: '401643678:TEST:19304f66-8d05-4e61-a90d-cbf1035c4b0c'          // Добавьте токен, если требуется
         };
 
         const config = {
