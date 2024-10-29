@@ -54,7 +54,9 @@ const newsRoutes = require('./routes/get-newsRoutes');
 const earnBalanceRoutes = require('./routes/get-earnBalanceRoutes');
 const transactionCoinRoutes = require('./routes/get-transactionCoinRoutes');
 const transactionEarnRoutes = require('./routes/get-transactionEarnRoutes');
+const paymentRoutes = require('./routes/post-paymentRoutes');
 
+app.use('/api', paymentRoutes)
 app.use('/api', exchangeRoutes);
 app.use('/api', sentCoinsRotes);
 app.use('/api', spotMarketRoutes);
