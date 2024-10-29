@@ -40,6 +40,11 @@ router.post('/create-payment', async (req, res) => {
         if (response.data.errorCode) {
             return res.status(400).json({ message: 'Ошибка при создании платежа', error: response.data });
         }
+        if (response.data.errorCode) {
+            console.error('Ошибка от API Сбербанка:', response.data);
+            return res.status(400).json({ message: 'Ошибка при создании платежа', error: response.data });
+        }
+        console.log('Ответ от API Сбербанка:', response.data);
 
         res.status(200).json({
             message: 'Платеж создан успешно',
