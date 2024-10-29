@@ -23,11 +23,11 @@ router.post('/create-payment', async (req, res) => {
             amount: Math.round(amount * 100), // Преобразование суммы в копейки
             currency: currency,
             orderNumber: orderNumber,
-            token: '401643678:TEST:19304f66-8d05-4e61-a90d-cbf1035c4b0c'
+            token: '401643678:TEST:fe1af0e7-c0ae-4043-b78b-0a8f6daa0cac'
         };
 
         const config = {
-            headers: { Authorization: `Bearer 401643678:TEST:19304f66-8d05-4e61-a90d-cbf1035c4b0c` },
+            headers: { Authorization: `Bearer 401643678:TEST:fe1af0e7-c0ae-4043-b78b-0a8f6daa0cac` },
             httpsAgent: agent
         };
 
