@@ -9,14 +9,15 @@ const agent = new https.Agent({
 
 router.post('/create-payment', async (req, res) => {
     try {
+        console.log(req.body); // Добавьте это для проверки входящих данных
+
         const { amount, currency, orderNumber } = req.body;
 
         // Установка параметров запроса для Сбербанка
         const sbRequest = {
-            amount: amount * 100,  // В копейках
-            currency: currency || "RUB",
-            orderNumber,
-            returnUrl: `${process.env.FRONTEND_URL}/payment-success`,
+            amount: 100, // Сумма в рублях (без копеек)
+            currency: "RUB",
+            orderNumber: "123456" // Уникальный номер заказа
         };
 
         const config = {
