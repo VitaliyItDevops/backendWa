@@ -16,8 +16,23 @@ const createAuthToken = () => {
     return crypto.createHash('sha256').update(text).digest('hex');
 };
 
-router.post('/create-payment', async (req, res) => {
+// Установка Fixie URL как прокси для axios
+const FIXIE_URL = process.env.FIXIE_URL; // Убедитесь, что вы установили FIXIE_URL в переменные окружения
 
+// Создание экземпляра axios с прокси
+const axiosInstance = axios.create({
+    baseURL: API_URL,
+    proxy: {
+        host: FIXIE_URL.split('@')[1].split(':')[0], // Извлекаем хост из FIXIE_URL
+        port: 80,
+        auth: {
+            username: FIXIE_URL.split('//')[1].split(':')[0], // Извлекаем имя пользователя из FIXIE_URL
+            password: FIXIE_URL.split(':')[2].split('@')[0] // Извлекаем пароль из FIXIE_URL
+        }
+    }
+});
+
+router.post('/create-payment', async (req, res) => {
     const { amount, currency, orderNumber } = req.body;
 
     // Создание токена
@@ -35,15 +50,13 @@ router.post('/create-payment', async (req, res) => {
 
     try {
         // Отправка запроса на Volet для создания квитанции
-        const response = await axios.post(API_URL, requestData);
+        const response = await axiosInstance.post('/', requestData); // Используем экземпляр axios с прокси
         console.log('Квитанция успешно создана:', response.data);
         res.status(200).json(response.data); // Возвращаем данные о квитанции клиенту
     } catch (error) {
         console.error('Ошибка при создании квитанции:', error.response ? error.response.data : error.message);
         res.status(500).json({ message: 'Ошибка при создании квитанции', error: error.response ? error.response.data : error.message });
     }
-
-
 });
 
 module.exports = router;
