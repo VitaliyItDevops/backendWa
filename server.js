@@ -24,7 +24,8 @@ const allowedOrigins = [
     'https://0152-188-163-45-97.ngrok-free.app',
     'https://web.telegram.org', // если нужно разрешить и Telegram WebApp
     'https://api.volet.com',
-    'https://api.volet.com/create_invoice'// домен API Volet
+    'https://api.volet.com/create_invoice',// домен API Volet
+    'http://fixie:69mAywN8QmEujtb@olympic.usefixie.com'
 ];
 
 const corsOptions = {
