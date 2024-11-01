@@ -21,9 +21,9 @@ app.use(bodyParser.json());
 
 
 const allowedOrigins = [
-    'https://0152-188-163-45-97.ngrok-free.app',
+    'https://9a11-188-163-45-97.ngrok-free.app',
     'https://web.telegram.org', // если нужно разрешить и Telegram WebApp
-
+    'https://6b2d-188-163-45-97.ngrok-free.app',
 ];
 
 const corsOptions = {
@@ -55,6 +55,9 @@ const newsRoutes = require('./routes/get-newsRoutes');
 const earnBalanceRoutes = require('./routes/get-earnBalanceRoutes');
 const transactionCoinRoutes = require('./routes/get-transactionCoinRoutes');
 const transactionEarnRoutes = require('./routes/get-transactionEarnRoutes');
+
+const uploadImagesRoutes = require('./routes/post-downloadNewsImageRoutes');
+app.use('/api', uploadImagesRoutes);
 
 app.use('/api', exchangeRoutes);
 app.use('/api', sentCoinsRotes);
