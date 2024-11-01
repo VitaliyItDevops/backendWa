@@ -23,7 +23,7 @@ app.use(bodyParser.json());
 const allowedOrigins = [
     'https://9a11-188-163-45-97.ngrok-free.app',
     'https://web.telegram.org', // если нужно разрешить и Telegram WebApp
-    'https://6b2d-188-163-45-97.ngrok-free.app',
+    'https://7bcf-188-163-45-97.ngrok-free.app',
 ];
 
 const corsOptions = {
