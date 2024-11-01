@@ -5,11 +5,9 @@ const router = express.Router();
 // Маршрут для обмена монетами
 router.put('/exchange-coins', async (req, res) => {
     try {
-        const { coin1, coin2, username } = req.body;
+        const { coin1, coin2, userId } = req.body;
         const { name: coin1Name, amount: coin1Amount, rate: coin1Rate, collectionName: coin1Collection } = coin1;
         const { name: coin2Name, rate: coin2Rate, collectionName: coin2Collection } = coin2;
-
-        const userId = username.toString();
 
         console.log('Exchange request received:', req.body);
 
